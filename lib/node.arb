@@ -1,0 +1,7 @@
+class Node
+    def initialization(data)
+        data = data
+        right = nil
+        left = nil
+    end
+end
