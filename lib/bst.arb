@@ -101,9 +101,134 @@ class Tree
         end
         return root
     end
-end
 
-new_tree = Tree.new([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    def level_order(root = @root, queue = [@root])
+        if queue.empty?
+            return root
+        end
+        if queue.length != 0
+            queue.push(root.left, root.right)
+        p root.data
+        foo = queue.shift
+        level_order(queue[0], queue.compact)
+        end
+    end
+
+    def preorder(root = @root)
+        if root.nil?
+            return 
+        else
+            p root.data
+            preorder(root.left)
+            preorder(root.right)
+        end
+    end
+
+    def inorder(root = @root)
+        if root.nil?
+            return 
+        else
+            inorder(root.left)
+            p root.data
+            inorder(root.right)
+        end
+    end
+    
+    def postorder(root = @root)
+        if root.nil?
+            return 
+        else
+            postorder(root.left)
+            postorder(root.right)
+            p root.data
+        end
+    end
+
+    def height(root = @root)
+        if root.nil?
+            return -1      
+        end
+        left_height = height(root.left)
+        right_height = height(root.right)
+        if left_height > right_height 
+            return left_height + 1
+        else
+            return right_height + 1
+        end
+    end
+
+    def depth(root = @root)
+        return height(@root) - height(root)
+    end
+
+    def balanced?(root = @root)
+        if root.nil?
+            return true
+        end
+        left = balanced?(root.left)
+        right = balanced?(root.right)
+        if (height(root.left) - height(root.right)).abs > 1
+            left = false
+        else
+            left = true
+        end
+        return left && right
+    end
+
+    #Below method is from Ropalma95 
+    def inorder_array(node = root, array = [])
+        unless node.nil?
+            inorder_array(node.left, array)
+            array << node.data
+            inorder_array(node.right, array)
+        end
+        array
+    end
+
+    def rebalance   
+        data = inorder_array()
+        self.root = build_tree(data)
+    end
+end
+# x = [1,2,3,4,5,6,7,8]
+# y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 100, 101, 102, 103, 104, 105]
+# new_tree = Tree.new(x)
+# # new_tree.pretty_print
+# # new_tree.delete(0)
+# new_tree.pretty_print
+# # x = new_tree.find(104)
+# # # p x
+# # p "height"
+# # p new_tree.height(x)
+# # p "depth"
+# # p new_tree.depth(x)
+# # new_tree.insert(6)
+# # new_tree.insert(9)
+# new_tree.pretty_print
+# p new_tree.balanced?
+# p new_tree.inorder
+
+#Trial Run
+foo = (Array.new(15) { rand(1..100) })
+p foo
+new_tree = Tree.new(foo)
 new_tree.pretty_print
-new_tree.delete(0)
+p new_tree.balanced?
+new_tree.insert(101)
+new_tree.insert(102)
+new_tree.insert(103)
 new_tree.pretty_print
+p new_tree.balanced?
+new_tree.rebalance
+p new_tree.balanced?
+new_tree.pretty_print
+p "preorder"
+p new_tree.preorder
+new_tree.pretty_print
+p "inorder"
+p new_tree.inorder
+new_tree.pretty_print
+
+p "postorder"
+p new_tree.postorder
+
